@@ -9,68 +9,26 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-<div class="row bg-light">
-    <div class="col-6">
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid justify-content-center">
-        <div class=" col-8 ">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Main</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/rooms">Rooms</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Orders</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href=".?lang=en" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="flag-icon flag-icon-us"> </span> English</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown09">
-                        <a class="dropdown-item" href=".?lang=ua"><span class="flag-icon flag-icon-ua"> </span>  Українська</a>
-                    </div>
-                </li>
-            </ul>
-            <button type="button" class="btn btn-outline-secondary btn-sm">Secondary</button>
-        </div>
-        </div>
-    </div>
-</nav>
-    </div>
-    <div class="col-4">
 
-    </div>
-</div>
 
 <div class="container-fluid">
+    <div th:replace="header.html :: header">></div>
     <div class="row justify-content-center" style="margin-top: 50px"><h3 class="text-center">Room Administration</h3>
     </div>
     <div class="row justify-content-center">
         <div class="col-6 ">
-
-
             <form id="post">
                 <div class="form-group">
-                    <label for="roomName">Room name</label>
-                    <input class="form-control" name="roomName" id="roomName" required="required">
+                    <label for="roomNameEn">English room name</label>
+                    <input class="form-control" name="roomNameEn" id="roomNameEn" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="roomNameUa">Ukrainian room name</label>
+                    <input class="form-control" name="roomNameUa" id="roomNameUa" required="required">
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
                     <input class="form-control" type="number" name="price" id="price">
-                </div>
-                <div class="form-group">
-                    <label for="locale">Language</label>
-                    <select class="form-control" id="locale" name="locale">
-                        <option value="en">en</option>
-                        <option value="ua">ua</option>
-                    </select>
                 </div>
                 <div class="form-group">
                     <label for="capacity">Room capacity</label>
@@ -95,8 +53,26 @@
                         <button type="submit" class="btn btn-primary">Add new room</button>
                     </div>
                 </div>
-
+                <span id="messageOk" style="color:green"></span>
+                <span id="messageEr" style="color:red"></span>
             </form>
+        </div>
+    </div>
+    <div class="border border-dark rounded-3" th:each="room:${rooms}" style="margin-top: 15px">
+        <div class="row">
+            <div class="col-4"><img
+                    src="https://cf.bstatic.com/xdata/images/hotel/square600/206746877.webp?k=d74256bd5ef7331794fc0c855aca6735f9fdd1b24e1856f10ce493d2e2bbf510&o="
+                    width="200" height="200" style="border-radius: 3px; margin: 7px"></div>
+            <div class="col-6">
+                <p>Room: <span th:text="${room.roomClass}"></p>
+                <p>Capacity:<span th:text="${room.capacity}"></span></p>
+                <p>Cost: <span th:text="${room.price}"></p>
+                <p>Available </p>
+
+            </div>
+            <div class="col-2 py-5">
+                <button class="btn btn-dark" type="button" th:value="${room.id}">Button</button>
+            </div>
         </div>
     </div>
 </div>
@@ -113,13 +89,9 @@
         event.preventDefault();
         let form = event.currentTarget;
         const url = "/admin/rooms/addRoom";
-        try {
-            const formData = new FormData(form);
-            const responseData = await postFormDataAsJson({url, formData});
-            console.log({responseData});
-        } catch (error) {
-            console.error(error);
-        }
+        const formData = new FormData(form);
+        await postFormDataAsJson({url, formData});
+
     }
 
     async function postFormDataAsJson({url, formData}) {
@@ -137,9 +109,12 @@
 
         const response = await fetch(url, fetchOptions);
 
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
+        if (response.ok) {
+            const message = await response.text();
+            $('#messageOk').text(message);
+        }else {
+            const message = await response.text();
+            $('#messageEr').text(message);
         }
 
         return response.json();

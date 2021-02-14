@@ -1,8 +1,8 @@
 package com.example.hotelSpring.entity;
 
 public enum Locale {
-    en("en"),
-    ua("ua");
+    EN("en"),
+    UA("ua");
     private String value;
 
     public String value() {
