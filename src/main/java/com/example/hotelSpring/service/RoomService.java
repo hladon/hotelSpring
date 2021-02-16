@@ -4,8 +4,13 @@ package com.example.hotelSpring.service;
 import com.example.hotelSpring.entity.Room;
 import com.example.hotelSpring.entity.RoomAndOrder;
 import com.example.hotelSpring.repository.RoomDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -19,13 +24,24 @@ import java.util.stream.IntStream;
 
 @Service
 public class RoomService {
-
+    private static final Logger LOGGER =  LoggerFactory.getLogger(RoomService.class);
     @Autowired
     RoomDAO roomDAO;
 
     private final int PAGE_SIZE=5;
-    public Room save(Room room) {
-        return roomDAO.save(room);
+
+    public ResponseEntity<String> save(Room room) {
+        try {
+            roomDAO.save(room);
+        }catch (DataIntegrityViolationException e){
+            LOGGER.trace(e.getMessage());
+            return new ResponseEntity<>("Such room name already exist!", HttpStatus.NOT_ACCEPTABLE);
+        }
+        catch (Exception e){
+            LOGGER.error(e.getMessage());
+            return new ResponseEntity<>("Internal error, room not saved", HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<>("Success", HttpStatus.ACCEPTED);
     }
 
     public Page<Room> findAll() {
@@ -44,6 +60,8 @@ public class RoomService {
 
     public Model setPagination(Model model, Optional<Integer> page, Optional<String> sort) {
         String sortType=sort.orElse("price");
+        if (sortType.equals("status"))
+            sortType="price";
         Page<Room> roomPage = roomDAO.findAll(
                 PageRequest.of(page.orElse(1) - 1, PAGE_SIZE, Sort.by(sortType).descending()));
         model.addAttribute("rooms", roomPage);
@@ -58,18 +76,13 @@ public class RoomService {
         Integer cap=Integer.parseInt(capacity.orElse("1"));
         Date startRentDate=Date.valueOf(startRent.get());
         Date endRentDate=Date.valueOf(endRent.get());
-
-        List<RoomAndOrder> roomPage = roomDAO.findRoomReservation(startRentDate,endRentDate,sortType,cap);
+        Pageable pageable=PageRequest.of(page.orElse(1) - 1, PAGE_SIZE);
+        Page<RoomAndOrder> roomPage = roomDAO.findRoomReservation(startRentDate,endRentDate,cap,sortType,pageable);
         model.addAttribute("rooms", roomPage);
         model.addAttribute("sortType",sortType);
-
-        return model;
+        return setPagesNumber(roomPage,model);
     }
 
-    private Pageable createPages(Optional<Integer> page, Optional<String> sort){
-        String sortType=sort.orElse("price");
-        return PageRequest.of(page.orElse(1) - 1, PAGE_SIZE, Sort.by(sortType).descending());
-    }
 
     private Model setPagesNumber(Page roomPage,Model model){
         int totalPages = roomPage.getTotalPages();

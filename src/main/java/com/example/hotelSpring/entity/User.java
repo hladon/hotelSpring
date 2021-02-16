@@ -21,6 +21,7 @@ public class User {
     private String password;
     @Column(name = "active")
     private boolean active;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
     @OneToMany( cascade = CascadeType.ALL,

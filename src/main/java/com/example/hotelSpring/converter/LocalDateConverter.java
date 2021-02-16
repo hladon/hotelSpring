@@ -1,4 +1,4 @@
-package com.example.hotelSpring.util;
+package com.example.hotelSpring.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

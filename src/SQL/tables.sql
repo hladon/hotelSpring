@@ -4,7 +4,7 @@ CREATE TABLE Room (
     room_name_ua VARCHAR(15) UNIQUE,
     price INT ,
     capacity INT,
-    room_class room_class
+    room_class VARCHAR(15)
     );
 
     CREATE TABLE userDB (

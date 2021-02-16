@@ -20,7 +20,7 @@ public class Room {
     private int price;
     @Column(name = "capacity")
     private int capacity;
-    @Column(name = "room_class")
-    private RoomClass roomClass;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private RoomClass category;
 }

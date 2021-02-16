@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
             return new ResponseEntity<>("Such user name already exist!", HttpStatus.NOT_ACCEPTABLE);
         }
         catch (Exception e){
-            LOGGER.trace(e.getMessage());
+            LOGGER.error(e.getMessage());
             return new ResponseEntity<>("Internal error, user not saved", HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity<>("New user saved", HttpStatus.ACCEPTED);

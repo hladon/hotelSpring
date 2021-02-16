@@ -61,28 +61,34 @@
                         <button value="capacity" class="btn btn-outline-dark"
                            th:classappend="${sortType.equals('capacity')} ? active" onclick="sendSortMethod('capacity')"> <span th:text="#{capacity}" ></span></button>
                         <button value="roomClass" class="btn btn-outline-dark"
-                           th:classappend="${sortType.equals('roomClass')} ? active" onclick="sendSortMethod('roomClass')"><span
+                           th:classappend="${sortType.equals('roomClass')} ? active" onclick="sendSortMethod('category')"><span
                                 th:text="#{room.type}"></span></button>
                         <button value="status" class="btn btn-outline-dark"
                            th:classappend="${sortType.equals('status')} ? active" onclick="sendSortMethod('status')"><span th:text="#{status}"></span></button>
                     </div>
                     <div class="border border-dark rounded-3" th:each="room:${rooms}" style="margin-top: 15px">
                         <div class="row">
-                            <div class="col-4"><img
+                            <div class="col-3"><img
                                     src="https://cf.bstatic.com/xdata/images/hotel/square600/206746877.webp?k=d74256bd5ef7331794fc0c855aca6735f9fdd1b24e1856f10ce493d2e2bbf510&o="
                                     width="200" height="200" style="border-radius: 3px; margin: 7px"></div>
                             <div class="col-6">
                                 <h5 class="h5 text-center"><span
                                         th:text="(${locale.toString().equals('en')} ? ${room.roomNameEn}:${room.roomNameUa})"></span>
                                 </h5>
-                                <p>Room: <span th:text="${room.roomClass}"></span></p>
+                                <p>Room: <span th:text="${room.category}"></span></p>
                                 <p>Capacity:<span th:text="${room.capacity}"></span></p>
                                 <p>Cost: <span th:text="${room.price}"></span></p>
                                 <p> <span th:if="${room instanceof T(com.example.hotelSpring.entity.RoomAndOrder)}" th:text="${room.status }"></span></p>
 
                             </div>
-                            <div class="col-2 py-5">
-                                <button class="btn btn-dark" type="button" th:value="${room.id}">Button</button>
+                            <div class="col-3 py-5">
+                                <p th:if="${startRent!=null}">From: <span th:text="${startRent} "></span></p>
+                                <p th:if="${startRent!=null}">To: <span th:text="${endRent}"></span></p>
+<!--                                <button class="btn btn-dark" type="button" th:value="${room.roomId}" onclick="order(this.value)">Button</button>-->
+                                <a class="btn btn-dark "  th:classappend="${startRent == null} ? disabled"
+                                   th:href="@{/order}+'?room='+${room.roomId}+'&start='+${startRent}+'&end='+${endRent}">
+
+                                    <span th:text="#{bookIn}"></span></a>
                             </div>
                         </div>
                     </div>
@@ -177,6 +183,24 @@
         window.location.href = url;
     }
 
+    async function order(val) {
+        const url = "/reservation";
+        let formData = new FormData();
+        formData.append("roomId", val);
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataJsonString = JSON.stringify(plainFormData);
+        const fetchOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: formDataJsonString
+        };
+
+        const response = await fetch(url, fetchOptions);
+    }
+
     function sendSortMethod(val){
         let url=new URL(window.location.href);
         let params = url.searchParams;
@@ -186,9 +210,9 @@
     }
 
     const exampleForm = document.getElementById("registration");
-    exampleForm.addEventListener("submit", handleFormSubmit);
+    exampleForm.addEventListener("submit", handleRegistration);
 
-    async function handleFormSubmit(event) {
+    async function handleRegistration(event) {
         event.preventDefault();
         let form = event.currentTarget;
         const url = "/registration";
