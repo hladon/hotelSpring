@@ -26,14 +26,14 @@
                 <div class="col-3 ">
                     <form action="/order" method="post">
                     <div class="mb-3">
-                            <label for="start" class="form-label">Check-in date</label>
+                            <label for="start" class="form-label"><span th:text="#{CheckInDate}"></span></label>
                             <input type="date" class="form-control" id="start" name="startRent"
                                    th:value="${#temporals.format(curDate, 'yyyy-MM-dd')}"
                                    th:min="${#temporals.format(curDate, 'yyyy-MM-dd')}"
                                    th:max="${#temporals.format(maxReservation, 'yyyy-MM-dd')}">
                     </div>
                     <div class="mb-3">
-                        <label for="end" class="form-label">Check-out date</label>
+                        <label for="end" class="form-label"><span th:text="#{CheckOut}"></span></label>
                         <input type="date" class="form-control" id="end" name="endRent"
                                th:value="${#temporals.format(nextDay, 'yyyy-MM-dd')}"
                                th:min="${#temporals.format(nextDay, 'yyyy-MM-dd')}"
@@ -47,8 +47,8 @@
                         <option value="5">5</option>
                     </select>
                     <div class="d-grid gap-2" style="margin-top: 20px">
-                        <button class="btn btn-dark" type="submit" sec:authorize="hasAuthority('USER')">Order</button>
-                        <button class="btn btn-dark" type="button" onclick="sendFilter()" >Button</button>
+                        <button class="btn btn-dark" type="submit" sec:authorize="hasAuthority('USER')"><span th:text="#{Order}"></span></button>
+                        <button class="btn btn-dark" type="button" onclick="sendFilter()" ><span th:text="#{Search}"></span></button>
                     </div>
                     </form>
                 </div>
@@ -61,7 +61,7 @@
                         <button value="capacity" class="btn btn-outline-dark"
                            th:classappend="${sortType.equals('capacity')} ? active" onclick="sendSortMethod('capacity')"> <span th:text="#{capacity}" ></span></button>
                         <button value="roomClass" class="btn btn-outline-dark"
-                           th:classappend="${sortType.equals('roomClass')} ? active" onclick="sendSortMethod('category')"><span
+                           th:classappend="${sortType.equals('category')} ? active" onclick="sendSortMethod('category')"><span
                                 th:text="#{room.type}"></span></button>
                         <button value="status" class="btn btn-outline-dark"
                            th:classappend="${sortType.equals('status')} ? active" onclick="sendSortMethod('status')"><span th:text="#{status}"></span></button>
@@ -75,16 +75,15 @@
                                 <h5 class="h5 text-center"><span
                                         th:text="(${locale.toString().equals('en')} ? ${room.roomNameEn}:${room.roomNameUa})"></span>
                                 </h5>
-                                <p>Room: <span th:text="${room.category}"></span></p>
-                                <p>Capacity:<span th:text="${room.capacity}"></span></p>
-                                <p>Cost: <span th:text="${room.price}"></span></p>
-                                <p> <span th:if="${room instanceof T(com.example.hotelSpring.entity.RoomAndOrder)}" th:text="${room.status }"></span></p>
+                                <p><span th:text="#{Room}"></span> : <span th:text="${room.category}"></span></p>
+                                <p><span th:text="#{Capacity}"></span> :<span th:text="${room.capacity}"></span></p>
+                                <p><span th:text="#{Price}"></span> : <span th:text="${room.price}"></span></p>
+                                <p> <span th:if="${room instanceof T(com.example.hotelSpring.entity.RoomAndOrder)}" th:text="${room.status !=null}?#{${room.status}}: #{AVAILABLE}"></span></p>
 
                             </div>
                             <div class="col-3 py-5">
-                                <p th:if="${startRent!=null}">From: <span th:text="${startRent} "></span></p>
-                                <p th:if="${startRent!=null}">To: <span th:text="${endRent}"></span></p>
-<!--                                <button class="btn btn-dark" type="button" th:value="${room.roomId}" onclick="order(this.value)">Button</button>-->
+                                <p th:if="${startRent!=null}"><span th:text="#{From}"></span> : <span th:text="${startRent} "></span></p>
+                                <p th:if="${startRent!=null}"><span th:text="#{To}"></span>: <span th:text="${endRent}"></span></p>
                                 <a class="btn btn-dark "  th:classappend="${startRent == null} ? disabled"
                                    th:href="@{/order}+'?room='+${room.roomId}+'&start='+${startRent}+'&end='+${endRent}">
 

@@ -18,13 +18,15 @@ public class UserPrincipalImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Role> list=new ArrayList<>();
+        List<Role> list = new ArrayList<>();
         list.add(user.getRole());
         return list;
     }
+
     public int getId() {
         return user.getUserId();
     }
+
     public User getUser() {
         return user;
     }

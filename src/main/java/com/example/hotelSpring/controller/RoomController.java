@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -27,9 +28,7 @@ public class RoomController {
 
     @PostMapping(value = "/admin/rooms/addRoom", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> addRoom(@RequestBody Room room) {
-
         return roomService.save(room);
-
     }
 
     @GetMapping("/admin/rooms")
@@ -50,17 +49,10 @@ public class RoomController {
 
         Locale loc = RequestContextUtils.getLocale(request);
         roomService.setInputDates(model);
-        if (endRent.isEmpty()||startRent.isEmpty()||capacity.isEmpty()){
-            roomService.setPagination(model, page, sort);
-        }else {
-            roomService.setPagination(model, page, sort,startRent,endRent,capacity);
-            model.addAttribute("startRent",startRent.get());
-            model.addAttribute("endRent",endRent.get());
-        }
-
-
+        roomService.setPagination(model, page, sort,startRent,endRent,capacity);
+        model.addAttribute("startRent",startRent.orElse(LocalDate.now().toString()));
+        model.addAttribute("endRent", endRent.orElse(LocalDate.now().plusDays(1).toString()));
         model.addAttribute("locale", loc);
-
         return "hotelRooms";
     }
 

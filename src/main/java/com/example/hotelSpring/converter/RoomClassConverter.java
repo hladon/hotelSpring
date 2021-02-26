@@ -6,7 +6,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter(autoApply = true)
-public class RoomClassConverter implements AttributeConverter<RoomClass,String> {
+public class RoomClassConverter implements AttributeConverter<RoomClass, String> {
     @Override
     public String convertToDatabaseColumn(RoomClass roomClass) {
         return roomClass.value();

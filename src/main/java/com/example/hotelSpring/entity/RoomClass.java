@@ -1,7 +1,7 @@
 package com.example.hotelSpring.entity;
 
 public enum RoomClass {
-    DELUXE("DELUXE"),STANDARD("STANDARD"),SUITE("SUITE");
+    DELUXE("DELUXE"), STANDARD("STANDARD"), SUITE("SUITE");
 
     private String value;
 

@@ -13,22 +13,50 @@
     <div th:replace="header.html :: header">></div>
     <div class="row justify-content-md-center">
         <div class="col-9">
-            <div class="border border-dark rounded-3"  style="margin-top: 15px">
+            <h4 class="h4 text-center">Order </h4>
+            <div class="border border-dark rounded-3" style="margin-top: 15px; padding: 15px">
                 <div class="row">
-                    <h4 class="h4 text-center">Order </h4>
                     <form action="/reservation" method="post">
-                        <label for="room">Room:</label>
-                        <input type="text" id="room"  th:value="(${locale.toString().equals('en')} ? ${room.roomNameEn}:${room.roomNameUa})" readonly><br><br>
-                        <label for="cap">Room capacity:</label>
-                        <input type="text" id="cap"  th:value="${room.capacity}" readonly><br><br>
-                        <label for="cost">Price per day:</label>
-                        <input type="text" id="cost"  th:value="${room.price}" readonly><br><br>
-                        <label for="from">From:</label>
-                        <input type="text" id="from"  th:value="${startRent}" readonly><br><br>
-                        <label for="to">To:</label>
-                        <input type="text" id="to"  th:value="${endRent}" readonly><br><br>
-                        <button class="btn btn-dark" type="submit" ><span th:text="#{bookIn}"></span>
-                        </button>
+                        <input type="hidden" name="room" th:value="${room.roomId}">
+                        <div class="mb-3 row">
+                            <label for="room" class="col-sm-2 col-form-label">Room:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="room" class="form-control-plaintext"
+                                       th:value="(${locale.toString().equals('en')} ? ${room.roomNameEn}:${room.roomNameUa})"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="cap" class="col-sm-2 col-form-label">Room capacity:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="cap" name="capacity" class="form-control-plaintext"
+                                       th:value="${room.capacity}" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="cost" class="col-sm-2 col-form-label">Price per day:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="cost" class="form-control-plaintext" th:value="${room.price}"
+                                       readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="from" class="col-sm-2 col-form-label">From:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="from" name="start" class="form-control-plaintext"
+                                       th:value="${startRent}" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="to" class="col-sm-2 col-form-label">To:</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="to" name="end" class="form-control-plaintext"
+                                       th:value="${endRent}" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row col-2">
+                            <button class="btn btn-dark" type="submit"><span th:text="#{bookIn}"></span></button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -1,10 +1,8 @@
 package com.example.hotelSpring.service;
 
-import com.example.hotelSpring.entity.Locale;
 import com.example.hotelSpring.entity.Role;
 import com.example.hotelSpring.entity.User;
 import com.example.hotelSpring.repository.UserDAO;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityExistsException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -41,8 +37,6 @@ public class UserService implements UserDetailsService {
         }
         return new ResponseEntity<>("New user saved", HttpStatus.ACCEPTED);
     }
-
-
 
     @Override
     public UserDetails loadUserByUsername(String username) {

@@ -13,11 +13,11 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
     private int reservationId;
-    @ManyToOne(fetch = FetchType.EAGER,targetEntity=User.class)
-    @JoinColumn(name="fk_user_id")
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @JoinColumn(name = "fk_user_id")
     private User user;
-    @ManyToOne(fetch = FetchType.EAGER,targetEntity=Room.class)
-    @JoinColumn(name="fk_room_id")
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Room.class)
+    @JoinColumn(name = "fk_room_id")
     private Room room;
     @Column(name = "start_rent")
     private LocalDate startRent;

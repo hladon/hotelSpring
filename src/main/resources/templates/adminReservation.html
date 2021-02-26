@@ -15,15 +15,18 @@
     <div class="col-9">
         <h4 class="h4 text-center">Orders </h4>
         <div class="border border-dark rounded-3" th:each="reservation:${reservations}" style="margin-top: 15px">
-            <div class="row">
-
-                <div class="col-6">
-                    <p>Order: <span th:text="${reservation.reservationId}"></span></p>
-                    <p>Rent period:<span th:text="${reservation.startRent}"> </span> - <span th:text="${reservation.endRent}"></span></p>
-                    <p>Capacity: <span th:text="${reservation.capacity}"></span></p>
-                </div>
-                <div class="col-2 py-5">
-                    <button class="btn btn-dark" type="button" th:value="${reservation.reservationId}">Button</button>
+            <div class="row justify-content-md-center">
+                <div class="col-9">
+                    <div class="col-6">
+                        <p>Order: <span th:text="${reservation.reservationId}"></span></p>
+                        <p>Rent period:<span th:text="${reservation.startRent}"> </span> - <span
+                                th:text="${reservation.endRent}"></span></p>
+                        <p>Capacity: <span th:text="${reservation.capacity}"></span></p>
+                    </div>
+                    <div class="col-2 py-5">
+                        <button class="btn btn-dark" type="button" th:value="${reservation.reservationId}">Button
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
