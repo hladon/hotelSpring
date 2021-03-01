@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.Locale;
 
 
 @Controller
@@ -35,7 +33,7 @@ public class ReservationController {
         return "adminReservation";
     }
 
-    @GetMapping("/user/order")
+    @GetMapping("/user/orders")
     @PreAuthorize("hasAuthority('USER')")
     public String userReservations(Model model) {
         model.addAttribute("reservations", reservationService.findAllByUser(getUser()));
@@ -60,20 +58,18 @@ public class ReservationController {
                                     @RequestParam("endRent") String end,
                                     @RequestParam("capacity") String capacity) {
         reservationService.saveOrder(start, end, capacity, getUser());
-        return new RedirectView("/user/order");
+        return new RedirectView("/user/orders");
     }
 
 
-    @GetMapping(path = "/order")
+    @GetMapping(path = "/reservation")
     @PreAuthorize("hasAuthority('USER')")
-    public String createOrder(Model model, HttpServletRequest request,
+    public RedirectView createOrder(Model model, HttpServletRequest request,
                               @RequestParam("room") Integer roomId,
-                              @RequestParam("start") String start,
-                              @RequestParam("end") String end) {
-        reservationService.prepareOrderBlank(model, roomId, start, end);
-        Locale loc = RequestContextUtils.getLocale(request);
-        model.addAttribute("locale", loc);
-        return "order";
+                              @RequestParam("start") LocalDate start,
+                              @RequestParam("end") LocalDate end) {
+        reservationService.createReservation( roomId, start, end,getUser());
+        return new RedirectView("/user/order");
     }
 
     private User getUser() {

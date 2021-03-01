@@ -12,20 +12,20 @@ import java.sql.Date;
 
 @Repository
 public interface RoomDAO extends PagingAndSortingRepository<Room, Integer> {
-    String COUNT_QUERY="SELECT count(*) FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent<= ?1" +
-            "            AND end_rent>=?2) as res" +
+    String COUNT_QUERY="SELECT count(*) FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent< ?1" +
+            "            AND end_rent>?2) as res" +
             "            ON room_id=fk_room_id WHERE r.capacity>=?3 ";
     String SELECT_RESERVATION = "SELECT r.room_id as \"roomId\", r.room_name_en as \"roomNameEn\"," +
             " r.room_name_ua as \"roomNameUa\",r.price as \"price\"," +
             "r.capacity as \"capacity\", r.category \"category\"," +
-            "res.status as \"status\" FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent<= ?1\n" +
-            "AND end_rent>=?2) as res\n" +
+            "res.status as \"status\" FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent< ?1\n" +
+            "AND end_rent>?2) as res\n" +
             "ON room_id=fk_room_id WHERE r.capacity>=?3  ";
     String SELECT_RESERVATION_STATUS = "SELECT r.room_id as \"roomId\", r.room_name_en as \"roomNameEn\"," +
             " r.room_name_ua as \"roomNameUa\",r.price as \"price\"," +
             "r.capacity as \"capacity\", r.category \"category\"," +
-            "res.status as \"status\" FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent<= ?1\n" +
-            "AND end_rent>=?2) as res\n" +
+            "res.status as \"status\" FROM room r LEFT JOIN (SELECT * FROM reservation WHERE start_rent< ?1\n" +
+            "AND end_rent>?2) as res\n" +
             "ON room_id=fk_room_id WHERE r.capacity>=?3 ORDER BY res.status ";
 
     @Query(value = SELECT_RESERVATION, countQuery = COUNT_QUERY, nativeQuery = true)

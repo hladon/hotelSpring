@@ -21,6 +21,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserDAO userDAO;
 
+
     public ResponseEntity<String> save(User user){
         try {
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));

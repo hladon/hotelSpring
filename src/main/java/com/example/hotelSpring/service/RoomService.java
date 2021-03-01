@@ -84,10 +84,10 @@ public class RoomService {
 
         if (sortType.equals("status")) {
             pageable = PageRequest.of(page.orElse(1) - 1, PAGE_SIZE);
-            roomPage = roomDAO.findRoomReservationStatus(startRentDate, endRentDate, cap, sortType, pageable);
+            roomPage = roomDAO.findRoomReservationStatus(endRentDate,startRentDate,  cap, sortType, pageable);
         } else {
             pageable = PageRequest.of(page.orElse(1) - 1, PAGE_SIZE, Sort.by(sortType).descending());
-            roomPage = roomDAO.findRoomReservation(startRentDate, endRentDate, cap, sortType, pageable);
+            roomPage = roomDAO.findRoomReservation(endRentDate,startRentDate,  cap, sortType, pageable);
         }
 
         model.addAttribute("rooms", roomPage);
