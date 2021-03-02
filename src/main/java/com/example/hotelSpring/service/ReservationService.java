@@ -26,11 +26,11 @@ public class ReservationService {
     RoomDAO roomDAO;
 
 
-    public Reservation saveOrder(String start, String end, String capacity, User user) {
+    public Reservation saveOrder(LocalDate start, LocalDate end, Integer capacity, User user) {
         Reservation reservation = new Reservation();
-        reservation.setStartRent(LocalDate.parse(start));
-        reservation.setEndRent(LocalDate.parse(end));
-        reservation.setCapacity(Integer.parseInt(capacity));
+        reservation.setStartRent(start);
+        reservation.setEndRent(end);
+        reservation.setCapacity(capacity);
         reservation.setStatus(ReservationStatus.BOOKED);
         reservation.setUser(user);
         return orderDAO.save(reservation);

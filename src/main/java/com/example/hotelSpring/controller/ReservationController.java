@@ -54,9 +54,9 @@ public class ReservationController {
 
     @PostMapping(path = "/order")
     @PreAuthorize("hasAuthority('USER')")
-    public RedirectView createOrder(@RequestParam("startRent") String start,
-                                    @RequestParam("endRent") String end,
-                                    @RequestParam("capacity") String capacity) {
+    public RedirectView createOrder(@RequestParam("startRent") LocalDate start,
+                                    @RequestParam("endRent") LocalDate end,
+                                    @RequestParam("capacity") Integer capacity) {
         reservationService.saveOrder(start, end, capacity, getUser());
         return new RedirectView("/user/orders");
     }
