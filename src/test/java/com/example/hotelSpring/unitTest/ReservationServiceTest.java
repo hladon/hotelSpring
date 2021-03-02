@@ -2,6 +2,7 @@ package com.example.hotelSpring.unitTest;
 
 import com.example.hotelSpring.entity.Reservation;
 import com.example.hotelSpring.entity.ReservationStatus;
+import com.example.hotelSpring.entity.Room;
 import com.example.hotelSpring.entity.User;
 import com.example.hotelSpring.repository.OrderDAO;
 import com.example.hotelSpring.repository.RoomDAO;
@@ -46,24 +47,31 @@ public class ReservationServiceTest {
         reservation.setUser(user);
         given(this.orderDAO.save(reservation)).willReturn(reservation);
         assertEquals(reservation,reservationService.saveOrder(start,end,capacity,user));
-
+        reservation.setStatus(ReservationStatus.RESERVED);
+        assertFalse(reservation.equals(reservationService.saveOrder(start,end,capacity,user)));
     }
 
-    @Test
-    public void saveOrderFalseTest() {
+    public void createReservationTest(){
         Reservation reservation = new Reservation();
+        reservation.setReservationId(1);
         LocalDate start=LocalDate.now();
         reservation.setStartRent(start);
         LocalDate end=LocalDate.now().plusDays(1);
         reservation.setEndRent(end);
-        Integer capacity=1;
-        reservation.setCapacity(capacity);
+        Room room=new Room();
+        Integer roomid=1;
+        room.setRoomId(roomid);
+        reservation.setRoom(room);
         reservation.setStatus(ReservationStatus.RESERVED);
         User user =new User();
         user.setUserId(1);
         reservation.setUser(user);
-        assertFalse(reservation.equals(reservationService.saveOrder(start,end,capacity,user)));
-
+        given(this.orderDAO.save(reservation)).willReturn(reservation);
+        given(this.orderDAO.existsById(1)).willReturn(true);
+        assertEquals(reservation,reservationService.createReservation(start,end,roomid,user));
+        reservation.setStatus(ReservationStatus.BOOKED);
+        assertFalse(reservation.equals(reservationService.createReservation(start,end,roomid,user)));
     }
+
 
 }

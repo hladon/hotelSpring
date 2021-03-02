@@ -10,22 +10,49 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div th:replace="header.html :: header">></div>
 
-    <div class="col-9">
-        <h4 class="h4 text-center">Orders </h4>
-        <div class="border border-dark rounded-3" th:each="reservation:${reservations}" style="margin-top: 15px">
-            <div class="row justify-content-md-center">
-                <div class="col-9">
+    <div th:replace="header.html :: header">></div>
+    <div class="row justify-content-md-center">
+        <div class="col-9">
+            <h4 class="h4 text-center">Orders </h4>
+
+            <div  th:each="reservation:${reservations}" style="margin-top: 15px">
+                    <div class=" row border border-dark rounded-3" th:if="${reservation.room ==null}">
+                        <div class="col-6">
+                            <p>Order: <span th:text="${reservation.reservationId}"></span></p>
+                            <p>Rent period:<span th:text="${reservation.startRent}"> </span> - <span
+                                    th:text="${reservation.endRent}"></span></p>
+                            <p>Capacity: <span th:text="${reservation.capacity}"></span></p>
+                        </div>
+                        <div class="col-3 py-5">
+                            <a class="btn btn-dark"
+                               th:href="@{'/admin/remove?id='+${reservation.reservationId}}">Cancel
+                            </a>
+                            <form action="/setRoom" method="post">
+                                <input type="hidden" name="reservation"
+                                       th:value="${reservation.reservationId}">
+                                <select class="form-select" aria-label="Default select example"
+                                        name="roomId">
+                                    <option th:each="room:${rooms}" th:value="${room.roomId}" > <span th:text=${room.roomNameEn}></span></option>
+                                </select>
+                                <input class="btn btn-dark" type="submit" value="Add Room"/>
+                            </form>
+                        </div>
+                </div>
+            </div>
+            <h4 class="h4 text-center">Reservation </h4>
+            <div  th:each="reservation:${reservations}" style="margin-top: 15px">
+                <div class=" row border border-dark rounded-3" th:if="${reservation.room !=null}">
                     <div class="col-6">
                         <p>Order: <span th:text="${reservation.reservationId}"></span></p>
                         <p>Rent period:<span th:text="${reservation.startRent}"> </span> - <span
                                 th:text="${reservation.endRent}"></span></p>
-                        <p>Capacity: <span th:text="${reservation.capacity}"></span></p>
+                        <p>Room Id: <span th:text="${reservation.room.roomId}"></span></p>
                     </div>
-                    <div class="col-2 py-5">
-                        <button class="btn btn-dark" type="button" th:value="${reservation.reservationId}">Button
-                        </button>
+                    <div class="col-3 py-5">
+                        <a class="btn btn-dark"
+                           th:href="@{'/admin/remove?id='+${reservation.reservationId}}">Cancel
+                        </a>
                     </div>
                 </div>
             </div>

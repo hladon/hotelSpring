@@ -85,8 +85,8 @@
                                 <p th:if="${startRent!=null}"><span th:text="#{From}"></span> : <span th:text="${startRent} "></span></p>
                                 <p th:if="${startRent!=null}"><span th:text="#{To}"></span>: <span th:text="${endRent}"></span></p>
                                 <p> <span th:if="${room instanceof T(com.example.hotelSpring.entity.RoomAndOrder)}" th:text="${room.status !=null}?#{${room.status}}: #{AVAILABLE}"></span></p>
-                                <a class="btn btn-dark " th:if="${room.status !=null}"   sec:authorize="hasAuthority('USER')"
-                                   th:href="@{/order}+'?room='+${room.roomId}+'&start='+${startRent}+'&end='+${endRent}">
+                                <a class="btn btn-dark " th:if="${room.status ==null}"   sec:authorize="hasAuthority('USER')"
+                                   th:href="@{/reservation}+'?room='+${room.roomId}+'&start='+${startRent}+'&end='+${endRent}">
 
                                     <span th:text="#{bookIn}"></span></a>
                             </div>

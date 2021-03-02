@@ -3,6 +3,7 @@ package com.example.hotelSpring.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "room")
@@ -23,4 +24,5 @@ public class Room {
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private RoomClass category;
+
 }

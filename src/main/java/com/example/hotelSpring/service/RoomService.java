@@ -46,10 +46,9 @@ public class RoomService {
         return new ResponseEntity<>("Success", HttpStatus.ACCEPTED);
     }
 
-    public Page<Room> findAll() {
-        Pageable firstPageWithTwoElements = PageRequest.of(0, 5, Sort.by("price").descending());
-        Page<Room> res = roomDAO.findAll(firstPageWithTwoElements);
-        return res;
+    public List<Room> findAll() {
+        Iterable<Room> res = roomDAO.findAll();
+        return (List<Room>) res;
     }
 
     public Model setInputDates(Model model) {
@@ -61,17 +60,6 @@ public class RoomService {
         return model;
     }
 
-    public Model setPagination(Model model, Optional<Integer> page, Optional<String> sort) {
-        String sortType = sort.orElse("price");
-        if (sortType.equals("status"))
-            sortType = "price";
-        Page<Room> roomPage = roomDAO.findAll(
-                PageRequest.of(page.orElse(1) - 1, PAGE_SIZE, Sort.by(sortType).descending()));
-        model.addAttribute("rooms", roomPage);
-        model.addAttribute("sortType", sortType);
-
-        return setPagesNumber(roomPage, model);
-    }
 
     public Model setPagination(Model model, Optional<Integer> page, Optional<String> sort,
                                Optional<String> startRent, Optional<String> endRent, Optional<String> capacity) {
